@@ -121,102 +121,203 @@ function CommunityApp() {
   };
 
   return (
-    <div style={{ padding: "20px", color: "black" }}>
-      <h2>Community Micro Frontend</h2>
+    <div style={{ color: "#111827" }}>
+      <h2 style={{ marginBottom: "20px", fontSize: "2rem" }}>
+        Community Module
+      </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "30px", alignItems: "start" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "24px",
+          alignItems: "start",
+        }}
+      >
         <div>
-          <h3>Create Post</h3>
-          <form onSubmit={handlePostSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <input
-              type="text"
-              placeholder="Title"
-              value={postForm.title}
-              onChange={(e) => setPostForm({ ...postForm, title: e.target.value })}
-              required
-            />
-            <textarea
-              placeholder="Content"
-              value={postForm.content}
-              onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
-              required
-            />
-            <select
-              value={postForm.category}
-              onChange={(e) => setPostForm({ ...postForm, category: e.target.value })}
+          <div style={sectionCard}>
+            <h3 style={sectionTitle}>Create Post</h3>
+            <form
+              onSubmit={handlePostSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
-              <option value="news">News</option>
-              <option value="discussion">Discussion</option>
-            </select>
-            <input
-              type="text"
-              placeholder="AI Summary (optional)"
-              value={postForm.aiSummary}
-              onChange={(e) => setPostForm({ ...postForm, aiSummary: e.target.value })}
-            />
-            <button type="submit">Create Post</button>
-          </form>
+              <input
+                type="text"
+                placeholder="Title"
+                value={postForm.title}
+                onChange={(e) =>
+                  setPostForm({ ...postForm, title: e.target.value })
+                }
+                required
+                style={inputStyle}
+              />
+              <textarea
+                placeholder="Content"
+                value={postForm.content}
+                onChange={(e) =>
+                  setPostForm({ ...postForm, content: e.target.value })
+                }
+                required
+                rows="4"
+                style={inputStyle}
+              />
+              <select
+                value={postForm.category}
+                onChange={(e) =>
+                  setPostForm({ ...postForm, category: e.target.value })
+                }
+                style={inputStyle}
+              >
+                <option value="news">News</option>
+                <option value="discussion">Discussion</option>
+              </select>
+              <input
+                type="text"
+                placeholder="AI Summary (optional)"
+                value={postForm.aiSummary}
+                onChange={(e) =>
+                  setPostForm({ ...postForm, aiSummary: e.target.value })
+                }
+                style={inputStyle}
+              />
+              <button type="submit" style={primaryButton}>
+                Create Post
+              </button>
+            </form>
+          </div>
 
-          <h3 style={{ marginTop: "30px" }}>Create Help Request</h3>
-          <form onSubmit={handleHelpSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <textarea
-              placeholder="Describe the help needed"
-              value={helpForm.description}
-              onChange={(e) => setHelpForm({ ...helpForm, description: e.target.value })}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Location"
-              value={helpForm.location}
-              onChange={(e) => setHelpForm({ ...helpForm, location: e.target.value })}
-            />
-            <button type="submit">Request Help</button>
-          </form>
+          <div style={{ ...sectionCard, marginTop: "22px" }}>
+            <h3 style={sectionTitle}>Create Help Request</h3>
+            <form
+              onSubmit={handleHelpSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+            >
+              <textarea
+                placeholder="Describe the help needed"
+                value={helpForm.description}
+                onChange={(e) =>
+                  setHelpForm({ ...helpForm, description: e.target.value })
+                }
+                required
+                rows="3"
+                style={inputStyle}
+              />
+              <input
+                type="text"
+                placeholder="Location"
+                value={helpForm.location}
+                onChange={(e) =>
+                  setHelpForm({ ...helpForm, location: e.target.value })
+                }
+                style={inputStyle}
+              />
+              <button type="submit" style={primaryButton}>
+                Request Help
+              </button>
+            </form>
+          </div>
         </div>
 
         <div>
-          <h3>Posts</h3>
-          {postsData?.posts?.map((post) => (
-            <div
-              key={post.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <strong>{post.title}</strong>
-              <p><b>Author:</b> {post.author}</p>
-              <p><b>Category:</b> {post.category}</p>
-              <p>{post.content}</p>
-              {post.aiSummary && <p><b>AI Summary:</b> {post.aiSummary}</p>}
-            </div>
-          ))}
+          <div>
+            <h3 style={listTitle}>Posts</h3>
+            {postsData?.posts?.length ? (
+              postsData.posts.map((post) => (
+                <div key={post.id} style={itemCard}>
+                  <h4 style={{ marginTop: 0, marginBottom: "10px", fontSize: "1.35rem" }}>
+                    {post.title}
+                  </h4>
+                  <p><strong>Author:</strong> {post.author}</p>
+                  <p><strong>Category:</strong> {post.category}</p>
+                  <p>{post.content}</p>
+                  {post.aiSummary && (
+                    <p>
+                      <strong>AI Summary:</strong> {post.aiSummary}
+                    </p>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p style={emptyText}>No posts yet.</p>
+            )}
+          </div>
 
-          <h3 style={{ marginTop: "30px" }}>Help Requests</h3>
-          {helpData?.helpRequests?.map((req) => (
-            <div
-              key={req.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <p><b>Author:</b> {req.author}</p>
-              <p><b>Description:</b> {req.description}</p>
-              <p><b>Location:</b> {req.location}</p>
-              <p><b>Resolved:</b> {req.isResolved ? "Yes" : "No"}</p>
-              <p><b>Volunteers:</b> {req.volunteers?.join(", ") || "None yet"}</p>
-            </div>
-          ))}
+          <div style={{ marginTop: "28px" }}>
+            <h3 style={listTitle}>Help Requests</h3>
+            {helpData?.helpRequests?.length ? (
+              helpData.helpRequests.map((req) => (
+                <div key={req.id} style={itemCard}>
+                  <p><strong>Author:</strong> {req.author}</p>
+                  <p><strong>Description:</strong> {req.description}</p>
+                  <p><strong>Location:</strong> {req.location || "Not specified"}</p>
+                  <p><strong>Resolved:</strong> {req.isResolved ? "Yes" : "No"}</p>
+                  <p>
+                    <strong>Volunteers:</strong>{" "}
+                    {req.volunteers?.length ? req.volunteers.join(", ") : "None yet"}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p style={emptyText}>No help requests yet.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+const sectionCard = {
+  background: "#f8fafc",
+  border: "1px solid #e5e7eb",
+  borderRadius: "14px",
+  padding: "18px",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+};
+
+const sectionTitle = {
+  marginTop: 0,
+  marginBottom: "14px",
+  fontSize: "1.6rem",
+};
+
+const listTitle = {
+  fontSize: "1.8rem",
+  marginBottom: "14px",
+};
+
+const itemCard = {
+  background: "white",
+  border: "1px solid #dbe3ef",
+  borderRadius: "14px",
+  padding: "18px",
+  marginBottom: "14px",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+};
+
+const inputStyle = {
+  width: "100%",
+  boxSizing: "border-box",
+  padding: "12px",
+  borderRadius: "10px",
+  border: "1px solid #cbd5e1",
+  fontSize: "1rem",
+};
+
+const primaryButton = {
+  padding: "12px",
+  borderRadius: "10px",
+  border: "none",
+  background: "#2563eb",
+  color: "white",
+  fontWeight: "bold",
+  fontSize: "1rem",
+  cursor: "pointer",
+};
+
+const emptyText = {
+  color: "#6b7280",
+  fontStyle: "italic",
+};
 
 export default CommunityApp;
