@@ -31,6 +31,8 @@ const typeDefs = `#graphql
     createHelpRequest(author: String!, description: String!, location: String): HelpRequest
     resolveHelpRequest(id: ID!): HelpRequest
     volunteerForHelpRequest(id: ID!, volunteerName: String!): HelpRequest
+    deletePost(id: ID!): CommunityPost
+deleteHelpRequest(id: ID!): HelpRequest
   }
 `;
 

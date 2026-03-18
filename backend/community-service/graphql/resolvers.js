@@ -52,6 +52,14 @@ const resolvers = {
       await request.save();
       return request;
     },
+
+    deletePost: async (_, { id }) => {
+      return await CommunityPost.findByIdAndDelete(id);
+    },
+
+    deleteHelpRequest: async (_, { id }) => {
+      return await HelpRequest.findByIdAndDelete(id);
+    },
   },
 };
 

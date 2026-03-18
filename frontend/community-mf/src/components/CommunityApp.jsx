@@ -51,6 +51,22 @@ const CREATE_HELP_REQUEST = gql`
   }
 `;
 
+const DELETE_POST = gql`
+  mutation DeletePost($id: ID!) {
+    deletePost(id: $id) {
+      id
+    }
+  }
+`;
+
+const DELETE_HELP_REQUEST = gql`
+  mutation DeleteHelpRequest($id: ID!) {
+    deleteHelpRequest(id: $id) {
+      id
+    }
+  }
+`;
+
 function CommunityApp() {
   const [postForm, setPostForm] = useState({
     title: "",
@@ -71,6 +87,12 @@ function CommunityApp() {
 
   const [createPost] = useMutation(CREATE_POST);
   const [createHelpRequest] = useMutation(CREATE_HELP_REQUEST);
+  const [deletePost] = useMutation(DELETE_POST);
+  const [deleteHelpRequest] = useMutation(DELETE_HELP_REQUEST);
+
+  const canDelete = (author) => {
+    return user && (user.username === author || user.role === "community_organizer");
+  };
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -117,6 +139,16 @@ function CommunityApp() {
       location: "",
     });
 
+    refetchHelp();
+  };
+
+  const handleDeletePost = async (id) => {
+    await deletePost({ variables: { id } });
+    refetchPosts();
+  };
+
+  const handleDeleteHelpRequest = async (id) => {
+    await deleteHelpRequest({ variables: { id } });
     refetchHelp();
   };
 
@@ -235,6 +267,15 @@ function CommunityApp() {
                       <strong>AI Summary:</strong> {post.aiSummary}
                     </p>
                   )}
+
+                  {canDelete(post.author) && (
+                    <button
+                      onClick={() => handleDeletePost(post.id)}
+                      style={deleteButton}
+                    >
+                      Delete Post
+                    </button>
+                  )}
                 </div>
               ))
             ) : (
@@ -255,6 +296,15 @@ function CommunityApp() {
                     <strong>Volunteers:</strong>{" "}
                     {req.volunteers?.length ? req.volunteers.join(", ") : "None yet"}
                   </p>
+
+                  {canDelete(req.author) && (
+                    <button
+                      onClick={() => handleDeleteHelpRequest(req.id)}
+                      style={deleteButton}
+                    >
+                      Delete Request
+                    </button>
+                  )}
                 </div>
               ))
             ) : (
@@ -312,6 +362,17 @@ const primaryButton = {
   color: "white",
   fontWeight: "bold",
   fontSize: "1rem",
+  cursor: "pointer",
+};
+
+const deleteButton = {
+  marginTop: "12px",
+  padding: "10px 14px",
+  borderRadius: "8px",
+  border: "none",
+  background: "#dc2626",
+  color: "white",
+  fontWeight: "bold",
   cursor: "pointer",
 };
 
